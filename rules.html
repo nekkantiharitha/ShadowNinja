@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Shadow Ninja - Rules & How to Play</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background:
+            radial-gradient(circle at top, #222 0%, #090909 55%, #000 100%);
+        color: white;
+        min-height: 100vh;
+    }
+
+    header {
+        text-align: center;
+        padding: 30px 15px;
+        background: rgba(0,0,0,0.7);
+        border-bottom: 2px solid #444;
+    }
+
+    h1 {
+        margin: 0;
+        font-size: 42px;
+    }
+
+    .subtitle {
+        margin-top: 8px;
+        color: #bbb;
+        font-size: 17px;
+    }
+
+    .container {
+        width: min(1000px, 92%);
+        margin: 30px auto;
+    }
+
+    .section {
+        background: rgba(25,25,25,0.95);
+        border: 1px solid #444;
+        border-radius: 16px;
+        margin-bottom: 20px;
+        padding: 24px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+    }
+
+    h2 {
+        margin-top: 0;
+        color: #ffcc33;
+    }
+
+    h3 {
+        color: #eee;
+    }
+
+    p, li {
+        color: #ddd;
+        line-height: 1.6;
+        font-size: 16px;
+    }
+
+    ul {
+        padding-left: 25px;
+    }
+
+    .controls {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 12px;
+        margin-top: 15px;
+    }
+
+    .key {
+        background: #111;
+        border: 1px solid #555;
+        border-radius: 10px;
+        padding: 14px;
+        text-align: center;
+    }
+
+    .key strong {
+        display: block;
+        font-size: 20px;
+        color: #fff;
+        margin-bottom: 5px;
+    }
+
+    .weapon {
+        background: #111;
+        border-radius: 10px;
+        padding: 12px;
+        margin: 8px 0;
+        border-left: 4px solid #777;
+    }
+
+    .warning {
+        border-left: 5px solid #ff4444;
+        background: rgba(120,0,0,0.18);
+        padding: 15px;
+        border-radius: 8px;
+    }
+
+    .tip {
+        border-left: 5px solid #44cc88;
+        background: rgba(0,100,60,0.18);
+        padding: 15px;
+        border-radius: 8px;
+    }
+
+    .back {
+        display: block;
+        width: 220px;
+        margin: 30px auto;
+        padding: 14px;
+        text-align: center;
+        background: #222;
+        border: 1px solid #666;
+        border-radius: 10px;
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .back:hover {
+        background: #333;
+    }
+
+    footer {
+        text-align: center;
+        padding: 30px;
+        color: #777;
+    }
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🥷 SHADOW NINJA</h1>
+    <div class="subtitle">Rules • Controls • How to Play • Weapons • Levels</div>
+</header>
+
+<div class="container">
+
+    <!-- HOW TO PLAY -->
+    <div class="section">
+        <h2>🎮 How to Play</h2>
+
+        <p>
+            Shadow Ninja is a fighting adventure where you control your own ninja.
+            Fight enemies, defeat bosses, earn coins, unlock weapons and complete
+            increasingly difficult levels.
+        </p>
+
+        <ol>
+            <li>Choose your ninja name.</li>
+            <li>Choose your custom ninja skin.</li>
+            <li>Select a weapon.</li>
+            <li>Choose a level or Boss Battle.</li>
+            <li>Defeat enemies.</li>
+            <li>Collect coins.</li>
+            <li>Unlock better weapons.</li>
+            <li>Complete every level.</li>
+            <li>Defeat the bosses.</li>
+        </ol>
+
+        <div class="tip">
+            💡 Tip: Don't constantly attack! Blocking and dashing can help you
+            avoid enemy attacks.
+        </div>
+    </div>
+
+
+    <!-- CONTROLS -->
+    <div class="section">
+        <h2>⌨️ Controls</h2>
+
+        <div class="controls">
+
+            <div class="key">
+                <strong>W</strong>
+                Move Up
+            </div>
+
+            <div class="key">
+                <strong>A</strong>
+                Move Left
+            </div>
+
+            <div class="key">
+                <strong>S</strong>
+                Move Down
+            </div>
+
+            <div class="key">
+                <strong>D</strong>
+                Move Right
+            </div>
+
+            <div class="key">
+                <strong>J</strong>
+                Normal Attack
+            </div>
+
+            <div class="key">
+                <strong>K</strong>
+                Heavy Attack
+            </div>
+
+            <div class="key">
+                <strong>L</strong>
+                Special Attack
+            </div>
+
+            <div class="key">
+                <strong>I</strong>
+                Block
+            </div>
+
+            <div class="key">
+                <strong>SHIFT</strong>
+                Dash
+            </div>
+
+            <div class="key">
+                <strong>1 - 0</strong>
+                Select Weapons
+            </div>
+
+            <div class="key">
+                <strong>ESC</strong>
+                Return to Menu
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- RULES -->
+    <div class="section">
+        <h2>📜 Game Rules</h2>
+
+        <ul>
+            <li>You must defeat the enemies to complete a level.</li>
+            <li>If your health reaches zero, you lose the battle.</li>
+            <li>Bosses have much more health than normal enemies.</li>
+            <li>Some weapons must be unlocked using coins.</li>
+            <li>You cannot use a locked weapon until you unlock it.</li>
+            <li>Coins can be earned by winning battles.</li>
+            <li>Your unlocked weapons and coins are saved locally on your device.</li>
+            <li>Boss battles become harder as you progress.</li>
+            <li>Do not leave the game while a battle is saving progress.</li>
+        </ul>
+    </div>
+
+
+    <!-- COMBAT -->
+    <div class="section">
+        <h2>⚔️ Combat Rules</h2>
+
+        <h3>Normal Attack</h3>
+        <p>
+            Press <b>J</b> to perform your normal attack.
+            This is useful for quick attacks.
+        </p>
+
+        <h3>Heavy Attack</h3>
+        <p>
+            Press <b>K</b> for a stronger attack.
+            Heavy attacks are slower but deal more damage.
+        </p>
+
+        <h3>Special Attack</h3>
+        <p>
+            Press <b>L</b> to perform your special attack.
+            Special attacks are powerful and should be used carefully.
+        </p>
+
+        <h3>Block</h3>
+        <p>
+            Hold <b>I</b> to block incoming attacks.
+        </p>
+
+        <h3>Dash</h3>
+        <p>
+            Press <b>SHIFT</b> to quickly move away from danger.
+        </p>
+    </div>
+
+
+    <!-- WEAPONS -->
+    <div class="section">
+        <h2>🗡️ Weapons</h2>
+
+        <div class="weapon">
+            <b>1 — Katana</b><br>
+            Balanced speed and damage.
+        </div>
+
+        <div class="weapon">
+            <b>2 — Wakizashi</b><br>
+            Fast short sword.
+        </div>
+
+        <div class="weapon">
+            <b>3 — Kunai</b><br>
+            Small throwing weapon.
+        </div>
+
+        <div class="weapon">
+            <b>4 — Shuriken</b><br>
+            Ranged throwing weapon.
+        </div>
+
+        <div class="weapon">
+            <b>5 — Yumi Bow</b><br>
+            Long-range weapon.
+        </div>
+
+        <div class="weapon">
+            <b>6 — Kusarigama</b><br>
+            Chain-and-sickle style weapon.
+        </div>
+
+        <div class="weapon">
+            <b>7 — Naginata</b><br>
+            Long-reach weapon.
+        </div>
+
+        <div class="weapon">
+            <b>8 — Nunchaku</b><br>
+            Fast close-range weapon.
+        </div>
+
+        <div class="weapon">
+            <b>9 — Bo Staff</b><br>
+            Balanced staff weapon.
+        </div>
+
+        <div class="weapon">
+            <b>0 — Tanto</b><br>
+            Fast short blade.
+        </div>
+
+        <p>
+            ⚠️ These weapons are inspired by historical Japanese weapons and
+            are used here as fictional game mechanics.
+        </p>
+    </div>
+
+
+    <!-- LEVELS -->
+    <div class="section">
+        <h2>🏯 Levels</h2>
+
+        <ol>
+            <li><b>Training Grounds</b> — Learn the basic controls.</li>
+            <li><b>Forest Path</b> — Fight multiple enemies.</li>
+            <li><b>Mountain Temple</b> — Stronger enemies appear.</li>
+            <li><b>Shadow Fortress</b> — Challenging combat.</li>
+            <li><b>Final Dojo</b> — Prepare for the boss.</li>
+        </ol>
+
+        <div class="tip">
+            ⭐ Completing levels rewards you with coins and helps unlock new
+            weapons.
+        </div>
+    </div>
+
+
+    <!-- BOSSES -->
+    <div class="section">
+        <h2>👹 Boss Battles</h2>
+
+        <ul>
+            <li>Bosses have large health bars.</li>
+            <li>Bosses deal more damage than normal enemies.</li>
+            <li>Bosses can use stronger attacks.</li>
+            <li>Watch their attack pattern before attacking.</li>
+            <li>Use Dash to escape powerful attacks.</li>
+            <li>Use Block when you cannot safely escape.</li>
+        </ul>
+
+        <div class="warning">
+            ⚠️ Bosses are supposed to be difficult. Don't worry if you lose
+            your first attempt!
+        </div>
+    </div>
+
+
+    <!-- COINS -->
+    <div class="section">
+        <h2>🪙 Coins & Unlocks</h2>
+
+        <p>You can earn coins by:</p>
+
+        <ul>
+            <li>Winning battles.</li>
+            <li>Defeating enemies.</li>
+            <li>Completing levels.</li>
+            <li>Defeating bosses.</li>
+        </ul>
+
+        <p>
+            Use your coins to unlock new weapons and other game features.
+        </p>
+    </div>
+
+
+    <!-- CUSTOM SKINS -->
+    <div class="section">
+        <h2>🎨 Custom Ninja Skins</h2>
+
+        <p>
+            Create your own ninja by choosing a name and appearance.
+        </p>
+
+        <ul>
+            <li>Choose your ninja's color.</li>
+            <li>Choose your own name.</li>
+            <li>Change your style whenever you want.</li>
+            <li>Your chosen appearance is used during battles.</li>
+        </ul>
+    </div>
+
+
+    <!-- WINNING -->
+    <div class="section">
+        <h2>🏆 Winning & Losing</h2>
+
+        <h3>You Win When:</h3>
+
+        <ul>
+            <li>All required enemies are defeated.</li>
+            <li>You defeat the boss in a boss battle.</li>
+            <li>You complete the level objective.</li>
+        </ul>
+
+        <h3>You Lose When:</h3>
+
+        <ul>
+            <li>Your health reaches zero.</li>
+            <li>You fail a required battle.</li>
+        </ul>
+    </div>
+
+
+    <!-- TIPS -->
+    <div class="section">
+        <h2>🥷 Ninja Tips</h2>
+
+        <ul>
+            <li>Don't stand still during a fight.</li>
+            <li>Use Dash to avoid powerful attacks.</li>
+            <li>Block when an enemy is about to attack.</li>
+            <li>Use fast weapons against quick enemies.</li>
+            <li>Use heavy attacks when you have a safe opening.</li>
+            <li>Save special attacks for difficult enemies.</li>
+            <li>Learn boss attack patterns.</li>
+            <li>Try different weapons to find your favorite.</li>
+        </ul>
+    </div>
+
+    <a class="back" href="index.html">
+        ← BACK TO SHADOW NINJA
+    </a>
+
+</div>
+
+<footer>
+    Shadow Ninja • Game Manual
+</footer>
+
+</body>
+</html>
