@@ -1,0 +1,1794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Shadow Ninja Legends</title>
+
+<style>
+*{box-sizing:border-box}
+
+html,body{
+    margin:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:#050509;
+    color:white;
+    font-family:Arial,sans-serif;
+}
+
+button,input{
+    font:inherit;
+}
+
+button{
+    border:0;
+    border-radius:10px;
+    padding:12px 18px;
+    margin:5px;
+    background:#7c3aed;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#a855f7;
+    transform:scale(1.03);
+}
+
+input{
+    background:#15151f;
+    border:1px solid #444;
+    color:white;
+    padding:12px;
+    border-radius:10px;
+    width:100%;
+    margin:5px 0;
+}
+
+#menu{
+    width:100%;
+    height:100%;
+    overflow:auto;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:25px;
+    background:
+      radial-gradient(circle at top,#31205c,#08080e 65%);
+}
+
+.panel{
+    width:min(1050px,96vw);
+    padding:30px;
+    border-radius:25px;
+    background:rgba(10,10,18,.95);
+    border:2px solid #6d28d9;
+    box-shadow:0 0 60px #4c1d95;
+}
+
+h1{
+    text-align:center;
+    font-size:clamp(40px,8vw,90px);
+    margin:0;
+    color:#c084fc;
+    text-shadow:0 0 30px #7c3aed;
+}
+
+.subtitle{
+    text-align:center;
+    color:#aaa;
+    margin:8px 0 25px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    gap:15px;
+}
+
+.card{
+    background:#11111b;
+    border:1px solid #333;
+    border-radius:16px;
+    padding:18px;
+}
+
+.card h2{
+    margin-top:0;
+}
+
+#skinPreview{
+    height:100px;
+    border-radius:15px;
+    margin:10px 0;
+    position:relative;
+    overflow:hidden;
+}
+
+#skinPreview:after{
+    content:"🥷";
+    font-size:65px;
+    position:absolute;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+}
+
+.weapon{
+    width:100%;
+    margin:3px 0;
+    text-align:left;
+}
+
+.locked{
+    background:#25252f;
+    color:#aaa;
+}
+
+#game{
+    display:none;
+    position:relative;
+    width:100%;
+    height:100%;
+}
+
+canvas{
+    display:block;
+    width:100%;
+    height:100%;
+}
+
+#hud{
+    position:absolute;
+    top:15px;
+    left:15px;
+    width:min(400px,90vw);
+    pointer-events:none;
+}
+
+.bar{
+    width:100%;
+    height:20px;
+    background:#222;
+    border:2px solid #555;
+    border-radius:20px;
+    overflow:hidden;
+    margin-bottom:6px;
+}
+
+#health{
+    height:100%;
+    width:100%;
+    background:linear-gradient(90deg,#ef4444,#22c55e);
+}
+
+#energy{
+    height:100%;
+    width:100%;
+    background:#38bdf8;
+}
+
+#hudBox{
+    padding:10px;
+    border-radius:12px;
+    background:rgba(0,0,0,.65);
+}
+
+#levelText{
+    position:absolute;
+    top:15px;
+    right:15px;
+    padding:12px;
+    border-radius:12px;
+    background:rgba(0,0,0,.7);
+    text-align:right;
+}
+
+#message{
+    position:absolute;
+    top:20%;
+    left:50%;
+    transform:translateX(-50%);
+    font-size:clamp(30px,6vw,80px);
+    font-weight:bold;
+    text-align:center;
+    text-shadow:0 5px 25px black;
+    pointer-events:none;
+}
+
+#boss{
+    display:none;
+    position:absolute;
+    bottom:40px;
+    left:50%;
+    transform:translateX(-50%);
+    width:min(700px,80vw);
+}
+
+#bossName{
+    text-align:center;
+    font-size:20px;
+    font-weight:bold;
+}
+
+#bossBar{
+    height:25px;
+    background:#7f1d1d;
+    border-radius:20px;
+    overflow:hidden;
+    border:2px solid #ef4444;
+}
+
+#bossHealth{
+    height:100%;
+    width:100%;
+    background:#dc2626;
+}
+
+#controls{
+    position:absolute;
+    bottom:10px;
+    left:10px;
+    padding:9px;
+    background:rgba(0,0,0,.65);
+    border-radius:10px;
+    font-size:12px;
+}
+
+.small{
+    color:#999;
+    font-size:13px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="menu">
+
+<div class="panel">
+
+<h1>SHADOW NINJA</h1>
+
+<div class="subtitle">
+LEGENDS — BECOME THE MASTER
+</div>
+
+<div class="grid">
+
+<!-- CHARACTER -->
+
+<div class="card">
+
+<h2>🥷 Custom Ninja</h2>
+
+<input id="name" placeholder="Ninja name" maxlength="15">
+
+<label>Skin color</label>
+
+<input
+id="skinColor"
+type="color"
+value="#7c3aed"
+>
+
+<div id="skinPreview"></div>
+
+<button onclick="startAI()">
+🤖 FIGHT AI
+</button>
+
+</div>
+
+
+<!-- LEVELS -->
+
+<div class="card">
+
+<h2>🏯 Adventure</h2>
+
+<button onclick="startLevel(1)">
+Level 1 — Forest
+</button>
+
+<button onclick="startLevel(2)">
+Level 2 — Temple
+</button>
+
+<button onclick="startLevel(3)">
+Level 3 — Mountain
+</button>
+
+<button onclick="startLevel(4)">
+Level 4 — Castle
+</button>
+
+<button onclick="startLevel(5)">
+Level 5 — Shadow Realm
+</button>
+
+<button onclick="startBoss()">
+👹 BOSS BATTLE
+</button>
+
+</div>
+
+
+<!-- WEAPONS -->
+
+<div class="card">
+
+<h2>⚔️ Weapons</h2>
+
+<div id="weapons"></div>
+
+</div>
+
+
+<!-- STATS -->
+
+<div class="card">
+
+<h2>🏆 Ninja Stats</h2>
+
+<p>🪙 Coins: <b id="menuCoins">0</b></p>
+
+<p>🏆 Wins: <b id="menuWins">0</b></p>
+
+<p>⚔️ Weapons unlocked:
+<b id="weaponCount">1</b>/10
+</p>
+
+<p class="small">
+Win battles and defeat bosses to earn coins
+and unlock stronger weapons.
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- GAME -->
+
+<div id="game">
+
+<canvas id="canvas"></canvas>
+
+<div id="hud">
+
+<div class="bar">
+<div id="health"></div>
+</div>
+
+<div class="bar">
+<div id="energy"></div>
+</div>
+
+<div id="hudBox">
+🪙 Coins: <span id="coins">0</span>
+<br>
+🏆 Wins: <span id="wins">0</span>
+<br>
+⚔️ <span id="currentWeapon">Katana</span>
+</div>
+
+</div>
+
+<div id="levelText">
+LEVEL: <b id="level">AI</b>
+<br>
+ENEMIES: <b id="enemyCount">0</b>
+</div>
+
+<div id="message"></div>
+
+<div id="boss">
+
+<div id="bossName">
+👹 SHADOW LORD
+</div>
+
+<div id="bossBar">
+<div id="bossHealth"></div>
+</div>
+
+</div>
+
+<div id="controls">
+WASD Move |
+J Attack |
+K Heavy |
+L Special |
+I Block |
+SHIFT Dash |
+1–0 Weapons |
+ESC Menu
+</div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   SHADOW NINJA LEGENDS
+   ONE FILE
+   ========================================================= */
+
+
+/* ---------- CANVAS ---------- */
+
+const canvas =
+document.getElementById("canvas");
+
+const ctx =
+canvas.getContext("2d");
+
+let W = innerWidth;
+let H = innerHeight;
+
+function resize(){
+
+    W = innerWidth;
+    H = innerHeight;
+
+    const dpr =
+        Math.min(devicePixelRatio || 1,2);
+
+    canvas.width = W*dpr;
+    canvas.height = H*dpr;
+
+    ctx.setTransform(
+        dpr,0,0,dpr,0,0
+    );
+}
+
+addEventListener("resize",resize);
+
+resize();
+
+
+/* ---------- DATA ---------- */
+
+const weapons = [
+
+{
+    name:"Katana",
+    cost:0,
+    damage:24,
+    range:95,
+    speed:1
+},
+
+{
+    name:"Wakizashi",
+    cost:100,
+    damage:20,
+    range:75,
+    speed:1.5
+},
+
+{
+    name:"Kunai",
+    cost:200,
+    damage:18,
+    range:180,
+    speed:2
+},
+
+{
+    name:"Shuriken",
+    cost:350,
+    damage:22,
+    range:220,
+    speed:2
+},
+
+{
+    name:"Yumi Bow",
+    cost:500,
+    damage:35,
+    range:300,
+    speed:.8
+},
+
+{
+    name:"Kusarigama",
+    cost:750,
+    damage:42,
+    range:135,
+    speed:.8
+},
+
+{
+    name:"Naginata",
+    cost:1000,
+    damage:45,
+    range:130,
+    speed:.7
+},
+
+{
+    name:"Nunchaku",
+    cost:1300,
+    damage:30,
+    range:90,
+    speed:1.8
+},
+
+{
+    name:"Bo Staff",
+    cost:1600,
+    damage:38,
+    range:125,
+    speed:1.3
+},
+
+{
+    name:"Tanto",
+    cost:2000,
+    damage:55,
+    range:70,
+    speed:1.5
+}
+
+];
+
+
+/* ---------- SAVE DATA ---------- */
+
+let coins =
+Number(localStorage.getItem("shadowCoins")) || 0;
+
+let wins =
+Number(localStorage.getItem("shadowWins")) || 0;
+
+let unlocked =
+JSON.parse(
+localStorage.getItem("shadowWeapons")
+|| '["Katana"]'
+);
+
+let selectedWeapon =
+"Katana";
+
+
+function save(){
+
+    localStorage.setItem(
+        "shadowCoins",
+        coins
+    );
+
+    localStorage.setItem(
+        "shadowWins",
+        wins
+    );
+
+    localStorage.setItem(
+        "shadowWeapons",
+        JSON.stringify(unlocked)
+    );
+}
+
+
+/* ---------- PLAYER ---------- */
+
+const player = {
+
+    x:W/2,
+    y:H/2,
+
+    hp:100,
+    maxHp:100,
+
+    energy:100,
+
+    color:"#7c3aed",
+
+    attacking:false,
+    blocking:false,
+
+    attackCooldown:0,
+
+    combo:0,
+    comboTimer:0
+
+};
+
+
+/* ---------- KEYBOARD ---------- */
+
+const keys = {};
+
+addEventListener("keydown",e=>{
+
+    keys[e.key.toLowerCase()] = true;
+
+    if(
+        e.key >= "1" &&
+        e.key <= "9"
+    ){
+
+        chooseWeapon(
+            Number(e.key)-1
+        );
+    }
+
+    if(e.key === "0"){
+        chooseWeapon(9);
+    }
+
+    if(e.key.toLowerCase()==="j"){
+        normalAttack();
+    }
+
+    if(e.key.toLowerCase()==="k"){
+        heavyAttack();
+    }
+
+    if(e.key.toLowerCase()==="l"){
+        specialAttack();
+    }
+
+    if(e.key.toLowerCase()==="i"){
+        player.blocking=true;
+    }
+
+    if(e.key==="Escape"){
+        menu();
+    }
+
+});
+
+
+addEventListener("keyup",e=>{
+
+    keys[e.key.toLowerCase()] = false;
+
+    if(e.key.toLowerCase()==="i"){
+        player.blocking=false;
+    }
+
+});
+
+
+/* ---------- CUSTOM SKIN ---------- */
+
+const skinInput =
+document.getElementById("skinColor");
+
+skinInput.addEventListener(
+"input",
+()=>{
+
+    player.color =
+        skinInput.value;
+
+    document.getElementById(
+        "skinPreview"
+    ).style.background =
+        player.color;
+});
+
+
+/* ---------- WEAPON UI ---------- */
+
+function drawWeaponMenu(){
+
+    const box =
+    document.getElementById("weapons");
+
+    box.innerHTML="";
+
+    weapons.forEach((w,i)=>{
+
+        const owned =
+        unlocked.includes(w.name);
+
+        const b =
+        document.createElement("button");
+
+        b.className =
+        "weapon " +
+        (owned ? "" : "locked");
+
+        b.textContent =
+        `${i===9?0:i+1}. ${w.name} — ${
+            owned
+            ? "UNLOCKED"
+            : "🪙 "+w.cost
+        }`;
+
+        b.onclick=()=>{
+
+            if(owned){
+
+                selectedWeapon=w.name;
+
+            }else if(coins>=w.cost){
+
+                coins-=w.cost;
+
+                unlocked.push(w.name);
+
+                selectedWeapon=w.name;
+
+                save();
+
+                drawWeaponMenu();
+                updateUI();
+            }
+        };
+
+        box.appendChild(b);
+    });
+}
+
+drawWeaponMenu();
+
+
+/* ---------- GAME STATE ---------- */
+
+let gameMode="ai";
+
+let currentLevel="AI";
+
+let enemies=[];
+
+let boss=null;
+
+let running=false;
+
+let winGiven=false;
+
+
+/* ---------- START GAME ---------- */
+
+function openGame(){
+
+    document.getElementById(
+        "menu"
+    ).style.display="none";
+
+    document.getElementById(
+        "game"
+    ).style.display="block";
+
+    running=true;
+    winGiven=false;
+
+    resize();
+
+    requestAnimationFrame(loop);
+}
+
+
+function menu(){
+
+    running=false;
+
+    document.getElementById(
+        "game"
+    ).style.display="none";
+
+    document.getElementById(
+        "menu"
+    ).style.display="flex";
+
+    document.getElementById(
+        "boss"
+    ).style.display="none";
+
+    drawWeaponMenu();
+    updateUI();
+}
+
+
+/* ---------- RESET ---------- */
+
+function resetPlayer(){
+
+    player.x=W/2;
+    player.y=H/2;
+
+    player.hp=100;
+    player.energy=100;
+
+    player.attackCooldown=0;
+    player.combo=0;
+
+}
+
+
+/* ---------- AI ---------- */
+
+function startAI(){
+
+    gameMode="ai";
+    currentLevel="AI";
+
+    resetPlayer();
+
+    enemies=[];
+
+    for(let i=0;i<5;i++){
+
+        enemies.push(
+            createEnemy(
+                100+Math.random()*(W-200),
+                100+Math.random()*(H-200)
+            )
+        );
+    }
+
+    boss=null;
+
+    document.getElementById(
+        "level"
+    ).textContent="AI";
+
+    openGame();
+}
+
+
+/* ---------- LEVELS ---------- */
+
+function startLevel(n){
+
+    gameMode="level";
+    currentLevel=n;
+
+    resetPlayer();
+
+    enemies=[];
+
+    boss=null;
+
+    const amount=2+n;
+
+    for(let i=0;i<amount;i++){
+
+        enemies.push(
+            createEnemy(
+                100+Math.random()*(W-200),
+                100+Math.random()*(H-200)
+            )
+        );
+    }
+
+    document.getElementById(
+        "level"
+    ).textContent=n;
+
+    openGame();
+}
+
+
+/* ---------- BOSS ---------- */
+
+function startBoss(){
+
+    gameMode="boss";
+    currentLevel="BOSS";
+
+    resetPlayer();
+
+    enemies=[];
+
+    boss={
+
+        x:W/2,
+        y:180,
+
+        hp:1200,
+        maxHp:1200,
+
+        speed:1.4,
+
+        cooldown:0
+
+    };
+
+    document.getElementById(
+        "level"
+    ).textContent="BOSS";
+
+    document.getElementById(
+        "boss"
+    ).style.display="block";
+
+    openGame();
+}
+
+
+/* ---------- ENEMIES ---------- */
+
+function createEnemy(x,y){
+
+    return{
+
+        x:x,
+        y:y,
+
+        hp:70,
+        maxHp:70,
+
+        speed:
+        1+Math.random()*.8,
+
+        attackCooldown:
+        Math.random()*70,
+
+        flash:0
+
+    };
+}
+
+
+/* ---------- DISTANCE ---------- */
+
+function distance(a,b){
+
+    const dx=a.x-b.x;
+    const dy=a.y-b.y;
+
+    return Math.sqrt(
+        dx*dx+dy*dy
+    );
+}
+
+
+/* ---------- CURRENT WEAPON ---------- */
+
+function getWeapon(){
+
+    return weapons.find(
+        w=>w.name===selectedWeapon
+    ) || weapons[0];
+}
+
+
+function chooseWeapon(index){
+
+    const w=weapons[index];
+
+    if(!w)return;
+
+    if(unlocked.includes(w.name)){
+
+        selectedWeapon=w.name;
+
+        updateUI();
+    }
+}
+
+
+/* ---------- ATTACKS ---------- */
+
+function normalAttack(){
+
+    if(!running)return;
+
+    if(player.attackCooldown>0)return;
+
+    const w=getWeapon();
+
+    player.attackCooldown=
+        18/w.speed;
+
+    player.attacking=true;
+
+    player.combo++;
+
+    player.comboTimer=80;
+
+    setTimeout(
+        ()=>player.attacking=false,
+        120
+    );
+
+    hitEnemies(w.damage,w.range);
+}
+
+
+function heavyAttack(){
+
+    if(player.energy<20)return;
+
+    if(player.attackCooldown>0)return;
+
+    player.energy-=20;
+
+    const w=getWeapon();
+
+    player.attackCooldown=35;
+
+    player.attacking=true;
+
+    setTimeout(
+        ()=>player.attacking=false,
+        250
+    );
+
+    hitEnemies(
+        w.damage*2,
+        w.range+25
+    );
+}
+
+
+function specialAttack(){
+
+    if(player.energy<40)return;
+
+    player.energy-=40;
+
+    player.attackCooldown=50;
+
+    player.attacking=true;
+
+    setTimeout(
+        ()=>player.attacking=false,
+        350
+    );
+
+    hitEnemies(
+        getWeapon().damage*3,
+        getWeapon().range+70
+    );
+}
+
+
+/* ---------- HIT ENEMIES ---------- */
+
+function hitEnemies(damage,range){
+
+    for(const enemy of enemies){
+
+        if(
+            distance(player,enemy)
+            <=range
+        ){
+
+            enemy.hp-=damage;
+            enemy.flash=8;
+        }
+    }
+
+    if(boss){
+
+        if(
+            distance(player,boss)
+            <=range+30
+        ){
+
+            boss.hp-=damage;
+        }
+    }
+}
+
+
+/* ---------- PLAYER MOVEMENT ---------- */
+
+function updatePlayer(){
+
+    let speed=
+        keys["shift"] ? 9 : 5;
+
+    if(keys["w"])player.y-=speed;
+    if(keys["s"])player.y+=speed;
+    if(keys["a"])player.x-=speed;
+    if(keys["d"])player.x+=speed;
+
+    player.x=
+        Math.max(
+            35,
+            Math.min(W-35,player.x)
+        );
+
+    player.y=
+        Math.max(
+            80,
+            Math.min(H-45,player.y)
+        );
+
+    if(keys["shift"]){
+
+        player.energy-=.4;
+
+        if(player.energy<0)
+            player.energy=0;
+
+    }else{
+
+        player.energy+=.15;
+
+        if(player.energy>100)
+            player.energy=100;
+    }
+
+    if(player.attackCooldown>0)
+        player.attackCooldown--;
+
+    if(player.comboTimer>0)
+        player.comboTimer--;
+
+    else
+        player.combo=0;
+}
+
+
+/* ---------- ENEMY AI ---------- */
+
+function updateEnemies(){
+
+    for(const enemy of enemies){
+
+        const dx=
+            player.x-enemy.x;
+
+        const dy=
+            player.y-enemy.y;
+
+        const d=
+            Math.sqrt(dx*dx+dy*dy);
+
+        if(d>60){
+
+            enemy.x+=
+                dx/d*enemy.speed;
+
+            enemy.y+=
+                dy/d*enemy.speed;
+        }
+
+        enemy.attackCooldown--;
+
+        if(
+            d<65 &&
+            enemy.attackCooldown<=0
+        ){
+
+            enemy.attackCooldown=65;
+
+            if(player.blocking){
+
+                player.energy-=5;
+
+            }else{
+
+                player.hp-=7;
+            }
+        }
+
+        if(enemy.flash>0)
+            enemy.flash--;
+    }
+
+
+    const before=enemies.length;
+
+    enemies=
+        enemies.filter(
+            e=>e.hp>0
+        );
+
+    const defeated=
+        before-enemies.length;
+
+    if(defeated>0){
+
+        coins+=
+            defeated*15;
+
+        updateUI();
+    }
+
+
+    if(
+        enemies.length===0 &&
+        !winGiven &&
+        gameMode==="level"
+    ){
+
+        completeLevel();
+    }
+
+}
+
+
+/* ---------- BOSS AI ---------- */
+
+function updateBoss(){
+
+    if(!boss)return;
+
+    const dx=
+        player.x-boss.x;
+
+    const dy=
+        player.y-boss.y;
+
+    const d=
+        Math.sqrt(dx*dx+dy*dy);
+
+    if(d>100){
+
+        boss.x+=
+            dx/d*boss.speed;
+
+        boss.y+=
+            dy/d*boss.speed;
+    }
+
+    boss.cooldown--;
+
+    if(
+        d<120 &&
+        boss.cooldown<=0
+    ){
+
+        boss.cooldown=45;
+
+        if(player.blocking){
+
+            player.energy-=10;
+
+        }else{
+
+            player.hp-=18;
+        }
+    }
+
+    document.getElementById(
+        "bossHealth"
+    ).style.width=
+        Math.max(
+            0,
+            boss.hp/boss.maxHp*100
+        )+"%";
+
+
+    if(boss.hp<=0){
+
+        winGiven=true;
+
+        coins+=750;
+        wins++;
+
+        save();
+        updateUI();
+
+        showMessage(
+            "👹 SHADOW LORD DEFEATED!"
+        );
+
+        boss=null;
+
+        setTimeout(
+            menu,
+            2500
+        );
+    }
+}
+
+
+/* ---------- LEVEL COMPLETE ---------- */
+
+function completeLevel(){
+
+    if(winGiven)return;
+
+    winGiven=true;
+
+    const reward=
+        currentLevel*100;
+
+    coins+=reward;
+    wins++;
+
+    save();
+
+    showMessage(
+        `🏆 LEVEL COMPLETE! +${reward} COINS`
+    );
+
+    setTimeout(
+        menu,
+        2200
+    );
+}
+
+
+/* ---------- PLAYER DEATH ---------- */
+
+function checkDeath(){
+
+    if(player.hp<=0){
+
+        running=false;
+
+        showMessage(
+            "💀 DEFEATED!"
+        );
+
+        setTimeout(
+            menu,
+            1800
+        );
+    }
+}
+
+
+/* ---------- BACKGROUND ---------- */
+
+function drawBackground(){
+
+    const gradient=
+        ctx.createLinearGradient(
+            0,0,0,H
+        );
+
+    gradient.addColorStop(
+        0,
+        "#111827"
+    );
+
+    gradient.addColorStop(
+        1,
+        "#020617"
+    );
+
+    ctx.fillStyle=gradient;
+
+    ctx.fillRect(
+        0,0,W,H
+    );
+
+
+    /* grid */
+
+    ctx.strokeStyle=
+        "rgba(255,255,255,.045)";
+
+    ctx.lineWidth=1;
+
+    for(
+        let x=0;
+        x<W;
+        x+=70
+    ){
+
+        ctx.beginPath();
+
+        ctx.moveTo(x,0);
+        ctx.lineTo(x,H);
+
+        ctx.stroke();
+    }
+
+    for(
+        let y=0;
+        y<H;
+        y+=70
+    ){
+
+        ctx.beginPath();
+
+        ctx.moveTo(0,y);
+        ctx.lineTo(W,y);
+
+        ctx.stroke();
+    }
+
+
+    /* moon */
+
+    ctx.fillStyle="#e5e7eb";
+
+    ctx.beginPath();
+
+    ctx.arc(
+        W-130,
+        120,
+        55,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+
+    /* trees */
+
+    for(
+        let x=50;
+        x<W;
+        x+=180
+    ){
+
+        ctx.fillStyle="#172554";
+
+        ctx.fillRect(
+            x,
+            120,
+            14,
+            H-170
+        );
+
+        ctx.fillStyle="#14532d";
+
+        ctx.beginPath();
+
+        ctx.arc(
+            x+7,
+            120,
+            35,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fill();
+    }
+}
+
+
+/* ---------- DRAW NINJA ---------- */
+
+function drawNinja(n,color){
+
+    ctx.save();
+
+    ctx.translate(
+        n.x,
+        n.y
+    );
+
+
+    /* shadow */
+
+    ctx.fillStyle=
+        "rgba(0,0,0,.45)";
+
+    ctx.beginPath();
+
+    ctx.ellipse(
+        0,
+        30,
+        32,
+        10,
+        0,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+
+    /* body */
+
+    ctx.fillStyle=color;
+
+    ctx.fillRect(
+        -20,
+        -3,
+        40,
+        38
+    );
+
+
+    /* head */
+
+    ctx.beginPath();
+
+    ctx.arc(
+        0,
+        -25,
+        23,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+
+    /* eyes */
+
+    ctx.fillStyle="white";
+
+    ctx.fillRect(
+        -13,
+        -29,
+        8,
+        5
+    );
+
+    ctx.fillRect(
+        5,
+        -29,
+        8,
+        5
+    );
+
+
+    /* scarf */
+
+    ctx.fillStyle="#111";
+
+    ctx.fillRect(
+        -22,
+        -13,
+        44,
+        7
+    );
+
+
+    /* weapon swing */
+
+    if(n.attacking){
+
+        ctx.strokeStyle="#facc15";
+
+        ctx.lineWidth=7;
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            10,
+            0
+        );
+
+        ctx.lineTo(
+            85,
+            -45
+        );
+
+        ctx.stroke();
+
+    }
+
+
+    /* block */
+
+    if(n===player && player.blocking){
+
+        ctx.strokeStyle="#38bdf8";
+
+        ctx.lineWidth=6;
+
+        ctx.beginPath();
+
+        ctx.arc(
+            0,
+            0,
+            55,
+            0,
+            Math.PI*2
+        );
+
+        ctx.stroke();
+    }
+
+
+    ctx.restore();
+}
+
+
+/* ---------- DRAW ENEMY ---------- */
+
+function drawEnemy(e){
+
+    drawNinja(
+        e,
+        e.flash>0
+        ? "#ffffff"
+        : "#dc2626"
+    );
+
+
+    /* HP */
+
+    ctx.fillStyle="#222";
+
+    ctx.fillRect(
+        e.x-30,
+        e.y-60,
+        60,
+        7
+    );
+
+    ctx.fillStyle="#22c55e";
+
+    ctx.fillRect(
+        e.x-30,
+        e.y-60,
+        60*
+        Math.max(
+            0,
+            e.hp/e.maxHp
+        ),
+        7
+    );
+}
+
+
+/* ---------- DRAW BOSS ---------- */
+
+function drawBoss(){
+
+    if(!boss)return;
+
+    ctx.save();
+
+    ctx.translate(
+        boss.x,
+        boss.y
+    );
+
+    ctx.fillStyle="#991b1b";
+
+    ctx.beginPath();
+
+    ctx.arc(
+        0,
+        0,
+        70,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+
+    ctx.fillStyle="#facc15";
+
+    ctx.font="60px Arial";
+
+    ctx.textAlign="center";
+
+    ctx.fillText(
+        "👹",
+        0,
+        22
+    );
+
+    ctx.restore();
+}
+
+
+/* ---------- MESSAGE ---------- */
+
+function showMessage(text){
+
+    const m=
+        document.getElementById(
+            "message"
+        );
+
+    m.textContent=text;
+
+    setTimeout(
+        ()=>m.textContent="",
+        1800
+    );
+}
+
+
+/* ---------- UI ---------- */
+
+function updateUI(){
+
+    document.getElementById(
+        "coins"
+    ).textContent=coins;
+
+    document.getElementById(
+        "wins"
+    ).textContent=wins;
+
+    document.getElementById(
+        "menuCoins"
+    ).textContent=coins;
+
+    document.getElementById(
+        "menuWins"
+    ).textContent=wins;
+
+    document.getElementById(
+        "weaponCount"
+    ).textContent=unlocked.length;
+
+    document.getElementById(
+        "currentWeapon"
+    ).textContent=
+        selectedWeapon;
+
+    document.getElementById(
+        "health"
+    ).style.width=
+        Math.max(
+            0,
+            player.hp
+        )+"%";
+
+    document.getElementById(
+        "energy"
+    ).style.width=
+        Math.max(
+            0,
+            player.energy
+        )+"%";
+
+    document.getElementById(
+        "enemyCount"
+    ).textContent=
+        enemies.length;
+}
+
+
+/* ---------- GAME LOOP ---------- */
+
+function loop(){
+
+    if(!running)return;
+
+    updatePlayer();
+
+    if(
+        gameMode==="ai" ||
+        gameMode==="level"
+    ){
+
+        updateEnemies();
+    }
+
+    if(gameMode==="boss"){
+
+        updateBoss();
+    }
+
+    checkDeath();
+
+    drawBackground();
+
+
+    for(
+        const enemy of enemies
+    ){
+
+        drawEnemy(enemy);
+    }
+
+
+    drawBoss();
+
+
+    drawNinja(
+        player,
+        player.color
+    );
+
+
+    updateUI();
+
+    requestAnimationFrame(loop);
+}
+
+
+/* ---------- INITIALIZE ---------- */
+
+updateUI();
+
+</script>
+
+</body>
+</html>
